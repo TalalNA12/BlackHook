@@ -7,25 +7,68 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
+import os
+import sys
+import time
+from colorama import Fore, Style, init
+
+init(autoreset=True)
+
+
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
 
-def type_text(text, color=Fore.WHITE, delay=0.03, end="\n"):
+def slow_print(text, color=Fore.WHITE, delay=0.04, newline=True):
     for char in text:
-        print(color + char + Style.RESET_ALL, end="", flush=True)
-        time.sleep(delay)
-    print(end=end)
-
-
-def loading_bar(label, color=Fore.RED, length=30, delay=0.03):
-    print(color + f"{label} [" + Style.RESET_ALL, end="", flush=True)
-
-    for _ in range(length):
-        print(color + "█" + Style.RESET_ALL, end="", flush=True)
+        sys.stdout.write(color + char + Style.RESET_ALL)
+        sys.stdout.flush()
         time.sleep(delay)
 
-    print(color + "] DONE" + Style.RESET_ALL)
+    if newline:
+        sys.stdout.write("\n")
+        sys.stdout.flush()
+
+
+def loading_bar(label, color=Fore.RED, total=25, delay=0.07):
+    sys.stdout.write(color + f"{label:<34} [" + Style.RESET_ALL)
+    sys.stdout.flush()
+
+    for _ in range(total):
+        sys.stdout.write(color + "█" + Style.RESET_ALL)
+        sys.stdout.flush()
+        time.sleep(delay)
+
+    sys.stdout.write(color + "] DONE\n" + Style.RESET_ALL)
+    sys.stdout.flush()
+    time.sleep(0.35)
+
+
+def boot_sequence():
+    clear_screen()
+
+    slow_print(">> BLACKHOOK BOOT SEQUENCE STARTED", Fore.RED, 0.04)
+    time.sleep(0.4)
+
+    slow_print(">> Initializing defensive analysis core...", Fore.WHITE, 0.035)
+    time.sleep(0.25)
+
+    slow_print(">> Loading local process scanner...", Fore.WHITE, 0.035)
+    time.sleep(0.25)
+
+    slow_print(">> Loading filesystem trace module...", Fore.WHITE, 0.035)
+    time.sleep(0.25)
+
+    slow_print(">> Capture module: DISABLED", Fore.GREEN, 0.035)
+    time.sleep(0.4)
+
+    print()
+    loading_bar("Process scanner", Fore.RED)
+    loading_bar("Filesystem scanner", Fore.RED)
+    loading_bar("Detection signatures", Fore.RED)
+    loading_bar("Report generator", Fore.RED)
+
+    time.sleep(0.8)
 
 
 BANNER = r"""
@@ -187,21 +230,22 @@ def print_results(findings):
 
 
 def main():
+    boot_sequence()
     display_banner()
 
     print(Fore.LIGHTBLUE_EX + "[PHASE 1] Scanning running processes...")
     process_findings = scan_processes()
-    time.sleep(0.5)
+    time.sleep(0.7)
 
-    print(Fore.LIGHTBLACK_EX + "[PHASE 2] Scanning recently modified suspicious files...")
+    print(Fore.LIGHTBLUE_EX + "[PHASE 2] Scanning recently modified suspicious files...")
     file_findings = scan_recent_files(minutes=15)
-    time.sleep(0.5)
+    time.sleep(0.7)
 
     all_findings = process_findings + file_findings
 
     print()
     print(Fore.RED + "[PHASE 3] Generating detection report...")
-    time.sleep(0.5)
+    time.sleep(0.7)
 
     print_results(all_findings)
 
