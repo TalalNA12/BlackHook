@@ -1,3 +1,20 @@
+"""
+BlackHook Detector
+
+This script is a safe educational detection tool.
+It does not capture real keyboard input.
+It does not read, store, or transmit keystrokes.
+
+The detector scans running processes and a controlled lab directory
+for suspicious keylogger-like indicators such as:
+- suspicious process names or command-line arguments
+- recently modified log files
+- filenames commonly associated with simulated input logging
+
+This tool is designed for defensive cybersecurity analysis
+and academic malware-behavior simulation only.
+"""
+
 import psutil
 from pathlib import Path
 import os
@@ -134,12 +151,13 @@ SUSPICIOUS_FILE_KEYWORDS = [
 ]
 
 WATCH_DIRS = [
-    Path.home() / "Desktop",
-    Path.home() / "Documents",
-    Path.home() / "Downloads",
-    Path("C:/Users/Public"),
-    Path("C:/Temp"),
-    Path("C:/ProgramData")
+    # Path.home() / "Desktop",
+    # Path.home() / "Documents",
+    # Path.home() / "Downloads",
+    # Path("C:/Users/Public"),
+    # Path("C:/Temp"),
+    # Path("C:/ProgramData")
+    Path("C:/BlackHookLab")
 ]
 
 WATCH_EXTENSIONS = [".txt", ".log", ".dat", ".json", ".cache"]

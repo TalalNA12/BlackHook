@@ -1,3 +1,12 @@
+"""
+BlackHook Simulator
+
+This script is a safe educational simulation.
+It does not capture real keyboard input.
+It only writes predefined fake strings to a local log file
+to demonstrate keylogger-like buffering and file-writing behavior.
+"""
+
 import time
 from pathlib import Path
 from datetime import datetime
@@ -9,13 +18,12 @@ import random
 init(autoreset=True)
 
 if os.name == "nt":
-    LOG_PATH = Path("C:/Users/Public/blackhook_trace.log")
+    LOG_PATH = Path("C:/BlackHookLab/logs/blackhook_trace.log")
 else:
-    LOG_PATH = Path.cwd() / "blackhook_trace.log"
+    LOG_PATH = Path.cwd() / "BlackHookLab" / "logs" / "blackhook_trace.log"
 
 FAKE_KEYSTROKES = [
     "admin",
-    "password123",
     "test_login",
     "student_portal",
     "fake_credentials",
